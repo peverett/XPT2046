@@ -53,11 +53,11 @@ static uint16_t mean (const uint16_t *vals, uint8_t n) {
 /**********************************************************/
 
 XPT2046::XPT2046 (uint8_t cs_pin, uint8_t irq_pin) 
-: _cs_pin(cs_pin), _irq_pin(irq_pin), _SPI(SPIClass(1)) { 
+: _cs_pin(cs_pin), _irq_pin(irq_pin), _spi(SPIClass(1)) { 
 }
 
 XPT2046::XPT2046 (uint8_t cs_pin, uint8_t irq_pin, uint32_t spiPortNumber)
-: _cs_pin(cs_pin), _irq_pin(irq_pin), _SPI(SPIClass(spiPortNumber)) {
+: _cs_pin(cs_pin), _irq_pin(irq_pin), _spi(SPIClass(spiPortNumber)) {
 }
 
 void XPT2046::begin(uint16_t width, uint16_t height) {
