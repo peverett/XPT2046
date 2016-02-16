@@ -1,6 +1,9 @@
 #ifndef _XPT2046_h_
 #define _XPT2046_h_
 
+#include <Arduino.h>
+#include <SPI.h>
+
 // On my display driver ICs i,j mapped to (width-y),x
 //  Flipping can be handled by order of calibration points, but not swapping
 #if !defined(SWAP_AXES)
@@ -15,6 +18,7 @@ public:
   enum adc_ref_t : uint8_t { MODE_SER, MODE_DFR };
 
   XPT2046 (uint8_t cs_pin, uint8_t irq_pin);
+  XPT2046 (uint8_t cs_pin, uint8_t irq_pin, uint32_t spiPortNumber);
 
   void begin(uint16_t width, uint16_t height);  // width and height with no rotation!
   void setRotation(rotation_t rot) { _rot = rot; }
@@ -46,6 +50,8 @@ private:
   uint16_t _cal_vi1, _cal_vj1;
 
   uint16_t _readLoop(uint8_t ctrl, uint8_t max_samples) const;
+
+  SPIClass _spi;
 };
 
 #endif  // _XPT2046_h_

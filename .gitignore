@@ -1,0 +1,4 @@
+# ignore VIM backup files
+*~
+# ignore VIM swap files
+*.swp

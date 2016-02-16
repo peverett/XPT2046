@@ -1,16 +1,17 @@
 # XPT2046
 
-Arduino library for XPT2046 / ADS7843 touchscreen driver.
+Arduino library for XPT2046 / ADS7843 touchscreen driver updated for Maple Leaf Mini (STM32F1) and multiple SPI port selection, on the Arduino IDE 1.6.5 (or later).
 
-[![XPT on ESP video](http://i.imgur.com/seqKBYU.jpg)](https://youtu.be/ql9J21sBRgQ)
+Forked from Spiros Papadimitriou's excellent XPT2046 library repo [spapadim/XPT2046](https://github.com/spapadim/XPT2046).
 
-Although there are a couple of libraries for this chip out there (e.g., [UTouch](http://www.rinkydinkelectronics.com/library.php?id=55) and [elechouse/touch](https://github.com/elechouse/touch)), both of them used bitbanging (rather than hardware SPI) and neither of them supported differential mode.  However, on the ESP8266, unless the SPI bus is shared, there aren't enough pins for both the LCD and the touchscreen.  Hardware SPI is also much faster, thus strongly preferred for the LCD.  This was the initial motivation but, while at it, I also added differential mode support.
+Trying to get the [TJCTM24024-SPI](http://www.elecfreaks.com/store/24-tft-lcd-tft0124sp-p-785.html) touch (XPT2046/ADS7843) and TFT (ILI9341) to work together on a [Maple Leaf Mini STM32F1](http://www.leaflabs.com/about-maple/) doesn't work using the same HW SPI interface. The Adafruit_ILI9341_STM library in the Maple Leaf [Arduino STM32 libraries](https://github.com/rogerclarkmelbourne/Arduino_STM32) runs the Hardware SPI too fast for the Touch SPI interface. Also, the Arduino STM32 SPI library doesn't support the `transfer16(uint16_t value)` function available in newer, standard Arduino IDE installations for Arduino boards.
 
-My implementation is based on [TI's technical note](http://www.ti.com/lit/an/sbaa036/sbaa036.pdf) and [TI's datasheet](http://www.ti.com/lit/ds/symlink/ads7843.pdf).  It has been tested on an XPT2046 (which is a clone), connected to an ESP8266 (Sparkfun Thing).
+In addition to the original class constructor, I have added a new one that let's you select the SPI port to use.
+```
+  XPT2046 (uint8_t cs_pin, uint8_t irq_pin);                          // Original
+  XPT2046 (uint8_t cs_pin, uint8_t irq_pin, uint32_t spiPortNumber);  // New
+```
 
-The examples require Ucglib, but it should be easy to rewrite them for a library of your choice.  Either way, you will also need to edit the parameters in the examples to match your setup.
+Using the original constructor will result in SPI Port 1 on the Maple Leaf Mini STM32F1 being selected, as in Spiros' original implementation.
 
-Caveats:
-* Single-ended mode is completely untested, although there is a relevant argument in `getPosition()`; if current draw is low, I may remove the option altogether
-* Does not support SPI transactions (and neither does Ucglib), so if you're sharing the bus, you should be careful!  It so happens that parameters good for Ucglib on an ILI9431 are also good for this chip; YMMV.
-* I'm not sure if all display modules have different touchscreen and LCD coordinates; mine did, and the code has been tested only for that configuration.
+Using the second constructor, a different Hardware SPI port can be selected. I have tested it with SPI Port 2.
