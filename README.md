@@ -15,3 +15,7 @@ In addition to the original class constructor, I have added a new one that let's
 Using the original constructor will result in SPI Port 1 on the Maple Leaf Mini STM32F1 being selected, as in Spiros' original implementation.
 
 Using the second constructor, a different Hardware SPI port can be selected. I have tested it with SPI Port 2.
+
+The Examples included with the library have also now been updated. For example, here is XPTPaint:
+
+![XPTPaint on Maple Leaf Mini](examples/XPTPaint/MLM_STM32F1_XPT_paint.jpg)
